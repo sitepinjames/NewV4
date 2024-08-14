@@ -1,100 +1,120 @@
-variable "region" {
-    type = string
-    description = "AWS Region"
-}
+# MAIN VARIABLES
 
-variable "account_id" {
-    type = string
-    description = "Target AWS account id"
-}
-
-variable "account" {
-    type = string
-    description = "Target account name"
-}
-
-variable "vpc_id" {
-    type = string
-    description = "VPC-for-dev4"
-}
-# # variable "vpc_name" {
-# #     type = string
-# #     description = "VPC-for-dev4"
-# }
-# # variable "sys_name" {
-# #     type = string
-# #     description = "System Name"
-# }
-
-variable "ec2_instances" {
-    type = map(any)
-    description = "Configuration information for EC2 instances that make up the System"
-}
-
-variable "sec_groups" {
-    type = map(any)
-    description = "Security Groups to be used by application instances"
-}
-
-variable "tags" {
-    type = map(any)
-    description = "Optional map of tags to set on resources, defaults to empty map"
-}
 variable "environment" {
-    type = string
-    description = "Optional map of tags to set on resources, defaults to empty map"
+  description = "The environment for which this configuration is applied."
+  type        = string
 }
-variable "load_balancers" {
-  type = map(object({
-    name                      = string
-    internal                  = bool
-    type                      = string
-    security_groups           = list(string)
-    subnet_ids                = list(string)
-    enable_deletion_protection = optional(bool)
-  }))
-  description = "Configuration for Application Load Balancers"
+
+variable "subnet_id" {
+  description = "The subnet ID for the instance."
+  type        = list(string)
 }
-variable "listeners" {
-  type = list(object({
-    load_balancer_key = string
-    port              = number
-    protocol          = string
-    default_action    = object({
-      type              = string
-      target_group_name = string
-    })
-  }))
-  description = "List of listeners for each load balancer"
+
+variable "vpc_security_group_ids" {
+  description = "The security group IDs for the instance."
+  type        = list(string)
+}
+
+variable "availability_zone" {
+  description = "Availabilty zone for ebs volume."
+  type        = list(string)
+}
+
+variable "key_name" {
+  description = "The key pair name for SSH access."
+  type        = string
+}
+
+variable "permissions_boundary" {
+  description = "Permissions boundary"
+  type        = string
+}
+
+variable "iam_instance_profile" {
+  description = "The IAM instance profile name for SSM."
+  type        = string
 }
 
 
-variable "target_groups" {
-  type = map(object({
-    name                = string
-    port                = number
-    protocol            = string
-    health_check        = object({
-    interval           = optional(number)
-    path               = optional(string)
-    timeout            = optional(number)
-    healthy_threshold  = optional(number)
-    unhealthy_threshold = optional(number)
-    protocol           = optional(string)
-    })
-    stickiness = object({
-      enabled         = bool
-      type            = string
-      cookie_duration = number
-    })
-  }))
-  description = "Configuration for Target Groups"
+########## DRUPAL ###########
+
+variable "drupal_ami" {
+  description = "The AMI ID for the Drupal instance."
+  type        = string
 }
 
-variable "instance_attachments" {
-  type = map(object({
-    target_group_name = string
-    instance_id       = string
-  }))
-  description = "Map of instances to be attached to target groups"
+variable "number_of_drupal_instances" {
+  description = "Number of Drupal servers."
+  type        = number
+}
+
+variable "drupal_volume_size" {
+  description = "The size of the root volume in GB."
+  type        = number
+}
+
+variable "drupal_instance_type" {
+  description = "Instance type for drupal server."
+  type        = list(string)
+}
+
+variable "drupal_security_group_ids" {
+  description = "Security groups for Drupal server."
+  type        = list(string)
+}
+
+
+########## PEGA ###########
+
+variable "pega_ami" {
+  description = "The AMI ID for the PEGA instance."
+  type        = string
+}
+
+variable "number_of_pega_instances" {
+  description = "Number of PEGA servers."
+  type        = number
+}
+
+variable "pega_volume_size" {
+  description = "The size of the root volume in GB."
+  type        = number
+}
+
+variable "pega_instance_type" {
+  description = "Instance type for pega server."
+  type        = list(string)
+}
+
+variable "pega_security_group_ids" {
+  description = "Security groups for PEGA server."
+  type        = list(string)
+}
+
+
+########## NGINX ###########
+
+variable "nginx_ami" {
+  description = "The AMI ID for the NGINX instance."
+  type        = string
+}
+
+variable "number_of_nginx_instances" {
+  description = "Number of NGINX servesr."
+  type        = number
+}
+
+variable "nginx_volume_size" {
+  description = "The size of the root volume in GB."
+  type        = number
+}
+
+variable "nginx_instance_type" {
+  description = "Instance type for NGINX server."
+  type        = list(string)
+}
+
+variable "nginx_security_group_ids" {
+  description = "Security groups for NGINX server."
+  type        = list(string)
 }

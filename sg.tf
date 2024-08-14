@@ -1,34 +1,17 @@
-resource "aws_security_group" "dev_devsecgroup"{
-   
-    for_each = var.sec_groups
+# module "security-group" {
+#     source = "terraform-aws-modules/security-group/aws"
+#     version = "4.17.2"
 
-    name = each.value["sg_name"]
-    description = each.value["sg_description"]
-    vpc_id = var.vpc_id
-    dynamic "ingress" {
-        for_each = lookup(each.value, "ingress_with_cidr_blocks", [])
-        content {
-            from_port   = lookup(ingress.value, "from_port", 0)
-            to_port     = lookup(ingress.value, "to_port", 0)
-            protocol    = lookup(ingress.value, "protocol", "tcp")
-            cidr_blocks = [lookup(ingress.value, "cidr_block", "0.0.0.0/0")]
-    }
-  }
+#     for_each = local.sec_groups
 
-  dynamic "egress" {
-        for_each = lookup(each.value, "egress_with_cidr_blocks", [])
-        content {
-            from_port   = lookup(egress.value, "from_port", 0)
-            to_port     = lookup(egress.value, "to_port", 0)
-            protocol    = lookup(egress.value, "protocol", "tcp")
-            
-    }
-  }
-
-    tags = merge(
-    var.tags,                # Common tags from variable
-    {
-      Name = each.value["sg_name"]  # Unique tag for the EC2 instance
-    }
-  )
-}
+#     name = each.value.name
+#     description = each.value.sg_description
+#     vpc_id = data.aws_vpc.this.id
+#     ingress_with_cidr_blocks = each.value["ingress_with_cidr_blocks"]
+#     egress_with_cidr_blocks = each.value["egress_with_cidr_blocks"]
+#     ingress_with_self = each.value["ingress_with_self"]
+#     egress_with_self = each.value["egress_with_self"]
+#     ingress_with_source_security_group_id = each.value["ingress_with_source_security_group_id"]
+#     egress_with_source_security_group_id = each.value["egress_with_source_security_group_id"]
+#     tags = local.tags
+# }

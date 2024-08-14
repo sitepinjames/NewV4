@@ -1,8 +1,8 @@
-# store the terraform state file in s3
 terraform {
   backend "s3" {
-    bucket  = "terrastatefilezidmer"
-    key     = "dev.tfstate"
+    bucket  = "terraform-v4-backend"
+    key     = "terraform-v4-state-bucket.tfstate"
     region  = "us-east-1"
+    encrypt = "true"
   }
 }
